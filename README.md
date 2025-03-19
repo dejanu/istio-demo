@@ -37,3 +37,38 @@ istioctl install -f bookinfo/demo-profile-no-gateways.yaml -y
 # Istiod installed
 # istio-system ns created: kubectl -n istio-system get all
 ```
+
+### Gateways
+
+* A **gateway** is a standalone Istio proxy deployed at the edge of the mesh. Gateways are used to route traffic into or out of the mesh
+* The **Kubernetes Gateway API** is a configuration API for traffic routing in Kubernetes. It represents the next generation of Kubernetes ingress, load balancing, and service mesh APIs, and is designed with learnings from Istio’s traditional APIs.
+
+The Kubernetes Gateway API CRDs do not come installed by default on most Kubernetes clusters, so make sure they are installed before using the Gateway API.
+```bash
+
+# check if Gateway API CRD are present
+kubectl get crd gateways.gateway.networking.k8s.io
+
+# install it
+kubectl kustomize "github.com/kubernetes-sigs/gateway-api/config/crd?ref=v1.2.1" | kubectl apply -f -
+```
+
+
+```bash
+
+customresourcedefinition.apiextensions.k8s.io/gatewayclasses.gateway.networking.k8s.io created
+customresourcedefinition.apiextensions.k8s.io/gateways.gateway.networking.k8s.io created
+customresourcedefinition.apiextensions.k8s.io/grpcroutes.gateway.networking.k8s.io created
+customresourcedefinition.apiextensions.k8s.io/httproutes.gateway.networking.k8s.io created
+customresourcedefinition.apiextensions.k8s.io/referencegrants.gateway.networking.k8s.io created
+```
+
+Add namespace label to instruct Istio to automatically inject Envoy sidecar proxies when you deploy your application later:
+
+```bash
+kubectl label namespace default istio-injection=enabled
+```
+
+### Links
+
+* https://istio.io/latest/docs/setup/getting-started/#download

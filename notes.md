@@ -18,3 +18,7 @@ Istio service mesh, leverages the sidecar pattern, by deploying a proxy containe
 ## Important Notes
 
 Technically Kubernetes implements sidecar containers as a special case of init containers (check Kubernetes v1.28: Introducing native sidecar containers)
+
+## Gateways, gateways, gateways
+
+A Kubernetes Ingress Resources exposes HTTP and HTTPS routes from outside the cluster to services within the cluster.
