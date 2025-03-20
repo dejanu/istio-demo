@@ -55,7 +55,6 @@ kubectl kustomize "github.com/kubernetes-sigs/gateway-api/config/crd?ref=v1.2.1"
 
 
 ```bash
-
 customresourcedefinition.apiextensions.k8s.io/gatewayclasses.gateway.networking.k8s.io created
 customresourcedefinition.apiextensions.k8s.io/gateways.gateway.networking.k8s.io created
 customresourcedefinition.apiextensions.k8s.io/grpcroutes.gateway.networking.k8s.io created
