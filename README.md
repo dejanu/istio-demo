@@ -50,10 +50,7 @@ kubectl get crd gateways.gateway.networking.k8s.io
 
 # install it k8s gateway
 kubectl kustomize "github.com/kubernetes-sigs/gateway-api/config/crd?ref=v1.2.1" | kubectl apply -f -
-```
-
-
-```bash
+....
 customresourcedefinition.apiextensions.k8s.io/gatewayclasses.gateway.networking.k8s.io created
 customresourcedefinition.apiextensions.k8s.io/gateways.gateway.networking.k8s.io created
 customresourcedefinition.apiextensions.k8s.io/grpcroutes.gateway.networking.k8s.io created
@@ -110,10 +107,28 @@ Acess Kiali
 ```bash
 istioctl dashboard kiali
 ```
-
 Generate traffic:
 ```bash
 for i in $(seq 1 100); do curl -s -o /dev/null "http://localhost/productpage";done
+```
+
+## Cleanup
+
+```bash
+# delete gateway
+kubectl delete -f bookinfo/gateway-api/bookinfo-gateway.yaml
+
+# delete add ons
+kubectl delete -f istio-1.25.0/samples/addons/
+
+# delete app 
+kubectl delete -f bookinfo/platform/kube/bookinfo.yaml
+
+# delete label
+kubectl label ns default istio-injection-
+
+# delete istio
+istioctl uninstall -f bookinfo/demo-profile-no-gateways.yaml -y
 ```
 
 ### Links
