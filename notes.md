@@ -19,7 +19,25 @@ Istio service mesh, leverages the sidecar pattern, by deploying a proxy containe
 
 Technically Kubernetes implements sidecar containers as a special case of init containers (check Kubernetes v1.28: Introducing native sidecar containers)
 
-## Gateways, gateways, gateways
-k8s API objects:
-    Ingress Resource exposes HTTP and HTTPS routes from outside the cluster to services within the cluster.
-    Gateway is the successor to the Ingress API (it represents the next generation of Kubernetes ingress, load balancing, and service mesh APIs). However, it does not include the Ingress resource (the closest parallel is the HTTPRoute).
+## Gateways: k8s API objects vs Istio gateway
+
+K8S Ingress Resource exposes HTTP and HTTPS routes from outside the cluster to services within the cluster.
+
+K8S Gateway is the successor to the Ingress API (it represents the next generation of Kubernetes ingress, load balancing, and service mesh APIs). However, it does not include the Ingress resource (the closest parallel is the HTTPRoute).
+
+You use a gateway to manage inbound and outbound traffic for your mesh, letting you specify which traffic you want to enter or leave the mesh
+
+Istio provides some preconfigured gateway proxy deployments (`istio-ingressgateway` and `istio-egressgateway`) that you can use. 
+
+Istio defines its own [Gateway resource](https://istio.io/latest/docs/reference/glossary/#gateway)
+```bash
+# k8s ingress API object
+kubectl get ingresses.networking.k8s.io -A
+
+# check if Gateway API CRD are present
+kubectl get crd gateways.gateway.networking.k8s.io
+kubectl get gateways.gateway.networking.k8s.io -A
+
+# istio 
+kubectl get gateways.networking.istio.io -A 
+```

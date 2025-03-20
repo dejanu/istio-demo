@@ -45,11 +45,10 @@ istioctl install -f bookinfo/demo-profile-no-gateways.yaml -y
 
 The Kubernetes Gateway API CRDs do not come installed by default on most Kubernetes clusters, so make sure they are installed before using the Gateway API.
 ```bash
-
 # check if Gateway API CRD are present
 kubectl get crd gateways.gateway.networking.k8s.io
 
-# install it
+# install it k8s gateway
 kubectl kustomize "github.com/kubernetes-sigs/gateway-api/config/crd?ref=v1.2.1" | kubectl apply -f -
 ```
 
@@ -62,10 +61,59 @@ customresourcedefinition.apiextensions.k8s.io/httproutes.gateway.networking.k8s.
 customresourcedefinition.apiextensions.k8s.io/referencegrants.gateway.networking.k8s.io created
 ```
 
-Add namespace label to instruct Istio to automatically inject Envoy sidecar proxies when you deploy your application later:
+Add label to `default` namespace to instruct Istio to automatically inject Envoy sidecar proxies when you deploy your application later:
 
 ```bash
 kubectl label namespace default istio-injection=enabled
+# check is ns was labeld
+kubectl get ns -l istio-injection
+```
+
+### Deploy App
+
+Deploy the BookInfo app:
+```bash
+kubectl apply -f bookinfo/platform/kube/bookinfo.yaml
+
+# as each pod becomes read, istio sidecar will be deployed along with it
+# check one of the pods
+kubectl get po productpage-v1-dffc47f64-p9skv -ojsonpath=" {.s
+pec.containers[*].name}"
+
+# check if app is running, get the response (RATINGS POD)
+kubectl get pod -l app=ratings -oname
+kubectl exec ratings-v1-65f797b499-9zrh7  -c ratings -- curl -sS productpage:9080/productpage
+```
+
+### Expose app to outside traffic
+
+Create k8s Gateway
+```bash
+kubectl apply -f bookinfo/gateway-api/bookinfo-gateway.yaml
+
+# check if bookinfo-gateway has been created
+kubectl get gateways.gateway.networking.k8s.io -A
+
+# the gateway uses allowedRoutes: port: 80
+kubectl port-forward svc/bookinfo-gateway-istio 8080:80
+```
+
+Access app product page on [your machine](http://127.0.0.1:8080/productpage)
+
+### Understand the mesh
+
+Install telemetry apps (Kiali,Grafana,Jaeger,Promethes) as addons
+```bash
+kubectl apply -f istio-1.25.0/samples/addons/
+```
+Acess Kiali
+```bash
+istioctl dashboard kiali
+```
+
+Generate traffic:
+```bash
+for i in $(seq 1 100); do curl -s -o /dev/null "http://localhost/productpage";done
 ```
 
 ### Links
