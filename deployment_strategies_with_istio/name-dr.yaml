@@ -1,0 +1,18 @@
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: name-destination-rule
+spec:
+  host: name
+  exportTo:
+  - "."
+  subsets:
+  - name: name-v1
+    labels:
+      version: v1
+  - name: name-v2
+    labels:
+      version: v2
+  - name: name-v3 # uncomment for canary deployment
+    labels:
+      version: v3

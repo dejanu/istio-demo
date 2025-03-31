@@ -1,0 +1,24 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: name-route
+spec:
+  hosts:
+  - name
+  exportTo:
+  - "."
+  gateways:
+  - mesh
+  http:
+  - match:
+    - headers:
+        x-test:
+          exact: use-v2
+    route: # route to v2 matching the header
+    - destination:
+        host: name
+        subset: name-v2
+  - route: # default route
+    - destination:
+        host: name
+        subset: name-v1
