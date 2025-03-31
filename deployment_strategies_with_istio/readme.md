@@ -74,12 +74,15 @@ Notice the indentation for the route to name-v1, which is our default route. E.g
 
 ### Canary
 
-Canary deployment is a pattern for rolling out releases to a subset of users/clients. The idea is to test and gather feedback from this subset and reduce risk by gradually introducing a new release.
+Canary deployment is a pattern for rolling out releases to a subset of users/clients. The idea is to test and gather feedback from this subset and reduce risk by gradually introducing a new release. (using HTTPRoute weight field in a virtual service)
 
-We want to implement a canary deployment pattern to the name service's v1 and v2 workloads and header based blue/green deployment to a `v3` workload
+We want to implement a canary deployment pattern to the name service's `v1` and `v2` workloads and header based blue/green deployment to a `v3` workload
+
+Deploy v3 of name service `kubectl apply -f name_versions/name-v3.yaml`
+
+Uncomment in `name-dr` to include the 3rd version and uncomment `name-vs` for enable B/G for v3
 
 `./traffic_gen.sh` traffic should still be routed to the v1 workload as the match condition did not evaluate to true and order of precedence dictates the first destination which will direct traffic to v1 workload.
-
 
 Apply new vs `kubectl apply -f enable_canary_deployment/vs_with_weight.yaml` you should see 90% to v1 and 10% to v2.
 
