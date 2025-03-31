@@ -118,7 +118,7 @@ for i in $(seq 1 100); do curl -s -o /dev/null "http://localhost/productpage";do
 # delete gateway
 kubectl delete -f bookinfo/gateway-api/bookinfo-gateway.yaml
 
-# delete add ons
+# delete add onsss
 kubectl delete -f istio-1.25.0/samples/addons/
 
 # delete app 
@@ -130,6 +130,41 @@ kubectl label ns default istio-injection-
 # delete istio
 istioctl uninstall -f bookinfo/demo-profile-no-gateways.yaml -y
 ```
+
+
+### Istio config stuff
+
+
+```bash
+# Check istio sidecar containers
+kubectl get pods -o=custom-columns=NAME:.metadata.name,CONTAINERS:.spec.containers[*].name
+
+# Start a pod without envoy
+kubectl run mybusyboxcurl --labels="sidecar.istio.io/inject=false" --image yauritux/busybox-curl -it -- sh
+```
+
+To remove the workload from mesh, just add annotation `sidecar.istio.io/inject: 'false'`, just try: `kubectl annotate --overwrite pods age-v1-6bcd598594-vxn5k sidecar.istio.io/inject=false` ??? To check
+```yaml
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sentences
+      mode: age
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: sentences
+        mode: age
+        version: v1
+      annotations:                          # Annotations block
+        sidecar.istio.io/inject: 'false'    # True to enable or false to disable
+    spec:
+      containers:
+      - image: praqma/istio-sentences:v1
+```
+
 
 ### Links
 
