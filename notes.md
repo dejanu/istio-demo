@@ -41,3 +41,16 @@ kubectl get gateways.gateway.networking.k8s.io -A
 # istio 
 kubectl get gateways.networking.istio.io -A 
 ```
+
+## Istio CRDs
+
+VirtualService = extension of the service object (allows for routing decisions). Define a list of routes where you match on the content in the requests (i.e. headers, method, path) and  make routing decision based on those (service version routing)
+DestinationRule = policies applied to traffic after routing has occured (lood balancing, pool size). Destination rules configure what happens to traffic for a destination defined in a virtual service.
+
+Main takeaways are:
+
+A virtual services hosts field is a user addressable destination and can be virtual.
+
+A virtual services destination must exist. In Kubernetes this will be a Kubernetes Service.
+
+A destination rule defines traffic policies that apply for the intended service after routing has occurred with a virtual service. E.g. route all traffic to v1, different load balancing modes for v1 and v2, etc.
