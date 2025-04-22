@@ -78,7 +78,7 @@ kubectl get po productpage-v1-dffc47f64-p9skv -ojsonpath=" {.s
 pec.containers[*].name}"
 
 # check if app is running, get the response (RATINGS POD)
-kubectl get pod -l app=ratings -oname
+kubectl get pod -l app=ratings -onamek
 kubectl exec ratings-v1-65f797b499-9zrh7  -c ratings -- curl -sS productpage:9080/productpage
 ```
 
@@ -169,3 +169,8 @@ spec:
 ### Links
 
 * https://istio.io/latest/docs/setup/getting-started/#download
+* Kiali
+```bash
+kubectl apply -f istio-1.25.1/samples/addons/kiali.yaml
+kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.25/samples/addons/kiali.yaml
+```

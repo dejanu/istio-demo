@@ -10,14 +10,14 @@ spec:
   gateways:
   - mesh
   http:
-  - match:                #  incorporate v3 blue/green
-    - headers:            #
-        x-test:           #
-          exact: use-v3   # will only be hit if the header match is true.
-    route:                #
-    - destination:        #
-        host: name        #
-        subset: name-v3   # ...to here
+  # - match:                #  incorporate v3 blue/green
+  #   - headers:            #
+  #       x-test:           #
+  #         exact: use-v3   # will only be hit if the header match is true.
+  #   route:                #
+  #   - destination:        #
+  #       host: name        #
+  #       subset: name-v3   # ...to here
   - route: #two routes are evaluated top down
     - destination:
         host: name

@@ -7,7 +7,7 @@ Deploy workloads vs and dr:
 
 ```bash
 # deploy only v1 for age and sentence workloads
-kubect apply -f deployment_strategies_with_istio
+kubectl apply -f deployment_strategies_with_istio
 
 # deploy 2 versions for name workload
 kubectl apply -f name_versions
@@ -95,6 +95,4 @@ Generate traffic to v3 `./traffic_gen.sh 'x-test: use-v3'`
 kubectl port-forward svc/kiali 20001:20001 -n istio-system
 kubectl port-forward svc/prometheus 9090:9090 -n istio-system
 kubectl port-forward svc/grafana 3000:3000 -n istio-system
-
-kubectl -n istio-system port-forward svc/kiali 20001:20001
 ```
